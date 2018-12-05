@@ -10,8 +10,30 @@
 #include <iostream>
 #include <fstream>
 #include <deque>
+#include <cmath>
+#include <stdlib.h>
 
 using namespace std;
+
+static const int tableSize = 103801;      //random prime number
+
+struct FileNode
+{
+    int fileIndex;
+    FileNode* next;
+};
+
+vector<FileNode*> HashTable[tableSize];
+
+
+int hashFunction(string chunk){
+    double sum=0;
+    double prime = 13;
+    for(int i=0; i<chunk.length(); i++){
+        sum += chunk[chunk.length()-1-i]*pow(prime,i);
+    }
+    return (int) fmod(sum,tableSize);
+}
 
 
 int getdir (string dir, vector<string> &files)
@@ -30,11 +52,13 @@ int getdir (string dir, vector<string> &files)
     return 0;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
     deque<string> myWords; //new deck with no words
-    string dir = string("sm_doc_set");
+    string dir = string(argv[1]);
     vector<string> files = vector<string>();
+
+    int chunkSize = atoi(argv[2]);
 
     getdir(dir,files);
 
@@ -47,7 +71,8 @@ int main()
     cout<<files[2];
     cout<<endl;
     cout<<getdir(dir,files);
-    string str = "sm_doc_set/" + files[2]; //change to 2
+    cout<<argv[1]<<endl;
+    string str = string(argv[1]) + "/" + files[2]; //change to 2
     inFile.open(str.c_str());
     if(inFile.is_open()){
         cout << "File Open" << endl;
@@ -79,14 +104,20 @@ int main()
 
     deque<string>::iterator it = myWords.begin();
 
-    while (myWords.size() > 6) {
-        for (int i = 0; i < 6; i++) {
+    while (myWords.size() > chunkSize) {
+        string str1 = "";
+        for (int i = 0; i < chunkSize; i++) {
             cout << *it << " ";
+            str1 += *it;
             it++;
         }
+        int tableIndex = hashFunction(str1);
+        FileNode* temp;
+        temp = HashTable[tableIndex];
+        cout << tableIndex << endl;
         myWords.pop_front();
         it = myWords.begin();
-        cout<<endl;
+        //cout<<endl;
     }
 
 
