@@ -16,7 +16,7 @@
 
 using namespace std;
 
-static const int tableSize = 1000081;      //random prime number
+static const int tableSize = 500009;      //random prime number
 
 struct FileNode
 {
@@ -33,7 +33,7 @@ struct FileInfo
 
 vector<FileInfo*> collision_data; //structs of file data
 
-int num_similar = 200; //change to argv[3]
+//int num_similar = 200; //change to argv[3]
 
 FileNode* HashTable[tableSize];
 
@@ -44,7 +44,7 @@ bool compareCollision (const FileInfo* file1, const FileInfo* file2) {
 
 int hashFunction(string chunk){
     double sum=0;
-    double prime = 13;
+    double prime = 7;
     for(int i=0; i<chunk.length(); i++){
         sum += chunk[chunk.length()-1-i]*pow(prime,i);
     }
@@ -71,12 +71,14 @@ int getdir (string dir, vector<string> &files)
 int main(int argc, char* argv[])
 {
     deque<string> myWords; //new deck with no words
-    //string dir = string(argv[1]);
-    string dir = string("sm_doc_set");
+    string dir = string(argv[1]);
+    //string dir = string("sm_doc_set");
     vector<string> files = vector<string>();
 
-    //int chunkSize = atoi(argv[2]);
-    int chunkSize = 8;
+    int chunkSize = atoi(argv[2]);
+    //int chunkSize = 8;
+
+    int num_similar = atoi(argv[3]);
 
     getdir(dir,files);
 
@@ -88,7 +90,7 @@ int main(int argc, char* argv[])
     }
 
     for (unsigned int i = 0;i < files.size();i++) {
-        cout << i << files[i] << endl;
+        //cout << i << files[i] << endl;
     }
 
     for (int i = 0; i < tableSize; i++) {
@@ -98,8 +100,8 @@ int main(int argc, char* argv[])
 for(int fileIndex=0; fileIndex < files.size(); fileIndex++) {
 
     ifstream inFile;
-    //string str = string(argv[1]) + "/" + files[fileIndex]; //change to 2
-    string str = string("sm_doc_set/" + files[fileIndex]);
+    string str = string(argv[1]) + "/" + files[fileIndex]; //change to 2
+    //string str = string("sm_doc_set/" + files[fileIndex]);
     inFile.open(str.c_str());
     if (inFile.is_open()) {
         //cout << "File Open" << endl;
@@ -201,7 +203,7 @@ for(int k=0; k<files.size(); k++){
 
     for(int k=0; k<files.size(); k++){
         for(int l=0; l<files.size(); l++){
-            cout << grid[k][l] << " ";
+            //cout << grid[k][l] << " ";
             if (grid[k][l] >= num_similar) {
                 FileInfo* temp = new FileInfo;
                 temp->file1 = k;
@@ -210,7 +212,7 @@ for(int k=0; k<files.size(); k++){
                 collision_data.push_back(temp);
             }
         }
-        cout << endl;
+        //cout << endl;
     }
 
     sort(collision_data.begin(),collision_data.end(),compareCollision);
