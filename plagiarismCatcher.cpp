@@ -27,6 +27,8 @@ FileNode* HashTable[tableSize];
 
 
 
+
+
 int hashFunction(string chunk){
     double sum=0;
     double prime = 13;
@@ -83,7 +85,7 @@ for(int fileIndex=0; fileIndex < files.size(); fileIndex++) {
     string str = string("sm_doc_set/" + files[fileIndex]);
     inFile.open(str.c_str());
     if (inFile.is_open()) {
-        cout << "File Open" << endl;
+        //cout << "File Open" << endl;
     }
 
     string s;
@@ -136,22 +138,38 @@ for(int fileIndex=0; fileIndex < files.size(); fileIndex++) {
             HashTable[tableIndex]->next = temp;
         }
 
-        cout << str1 << " ";
-        cout << tableIndex << " ";
+        //cout << str1 << " ";
+        //cout << tableIndex << " ";
         //FileNode* cur = HashTable[tableIndex];
         // while(HashTable[tableIndex] != NULL) {
         //    cout << HashTable[tableIndex]->fileIndex << " ";
         //    cur = cur->next;
         //  }
-        cout << HashTable[tableIndex]->fileIndex << endl;
+        //cout << HashTable[tableIndex]->fileIndex << endl;
         //cout << endl;
         myWords.pop_front();
         it = myWords.begin();
         //cout<<endl;
     }
-    cout<<endl;
-    cout<<endl;
+    //cout<<endl;
+    //cout<<endl;
 }
+
+int grid[files.size()][files.size()];
+
+    for(int i=0; i<tableSize; i++){
+        //cout << "Table Index: " << i << endl;
+        FileNode* cur = HashTable[i];
+        while(cur != NULL) {
+            cout << HashTable[i]->fileIndex << " ";
+            cur = cur->next;
+        }
+        cout << endl;
+
+
+    }
+
+
     return 0;
 }
 
