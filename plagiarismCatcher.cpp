@@ -168,16 +168,29 @@ for(int k=0; k<files.size(); k++){
         if(HashTable[i] == NULL){
         }else {
             FileNode *cur = HashTable[i];
+            vector<int> nodes;
             while (cur != NULL) {
-                cout << cur->fileIndex << " ";
-
-                
-
+                //cout << cur->fileIndex << " ";
+                nodes.push_back(cur->fileIndex);
                 cur = cur->next;
             }
-            cout << endl;
+            //cout << endl;
+
+            for(int m=0; m<nodes.size()-1; m++){
+                for(int n=m+1; n<nodes.size();n++){
+                    grid[nodes[n]][nodes[m]]++;
+                }
+            }
+
         }
 
+    }
+
+    for(int k=0; k<files.size(); k++){
+        for(int l=0; l<files.size(); l++){
+            cout << grid[k][l] << " ";
+        }
+        cout << endl;
     }
 
 
