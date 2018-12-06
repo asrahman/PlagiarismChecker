@@ -92,7 +92,7 @@ for(int fileIndex=0; fileIndex < files.size(); fileIndex++) {
     //inFile >> s;
 
     //cout << s << endl;
-    cout << endl;
+    //cout << endl;
     while (inFile) {
         inFile >> s;
         //cout << s << " ";
@@ -132,10 +132,10 @@ for(int fileIndex=0; fileIndex < files.size(); fileIndex++) {
             HashTable[tableIndex]->fileIndex = fileIndex;
             HashTable[tableIndex]->next = NULL;
         } else {
-            FileNode *temp = HashTable[tableIndex];
-            HashTable[tableIndex] = new FileNode;
-            HashTable[tableIndex]->fileIndex = fileIndex;
-            HashTable[tableIndex]->next = temp;
+            FileNode *temp = new FileNode;
+            temp->fileIndex = fileIndex;
+            temp->next = HashTable[tableIndex];
+            HashTable[tableIndex] = temp;
         }
 
         //cout << str1 << " ";
@@ -158,14 +158,16 @@ for(int fileIndex=0; fileIndex < files.size(); fileIndex++) {
 int grid[files.size()][files.size()];
 
     for(int i=0; i<tableSize; i++){
-        //cout << "Table Index: " << i << endl;
-        FileNode* cur = HashTable[i];
-        while(cur != NULL) {
-            cout << HashTable[i]->fileIndex << " ";
-            cur = cur->next;
-        }
-        cout << endl;
 
+        if(HashTable[i] == NULL){
+        }else {
+            FileNode *cur = HashTable[i];
+            while (cur != NULL) {
+                cout << HashTable[i]->fileIndex << " ";
+                cur = cur->next;
+            }
+            cout << endl;
+        }
 
     }
 
