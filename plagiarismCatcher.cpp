@@ -65,20 +65,24 @@ int main(int argc, char* argv[])
 
     getdir(dir,files);
 
+    for(int i=0; i<files.size(); i++){
+        if(files[i] == "." || files[i] == ".."){
+            files.erase(files.begin()+i);
+            i--;
+        }
+    }
+
     for (unsigned int i = 0;i < files.size();i++) {
         cout << i << files[i] << endl;
     }
 
+for(int fileIndex=0; fileIndex < files.size(); fileIndex++) {
+
     ifstream inFile;
-    cout<<endl;
-    cout<<files[2];
-    cout<<endl;
-    cout<<getdir(dir,files);
-    //cout<<argv[1]<<endl;
-    //string str = string(argv[1]) + "/" + files[2]; //change to 2
-    string str = string("sm_doc_set/" + files[2]);
+    //string str = string(argv[1]) + "/" + files[fileIndex]; //change to 2
+    string str = string("sm_doc_set/" + files[fileIndex]);
     inFile.open(str.c_str());
-    if(inFile.is_open()){
+    if (inFile.is_open()) {
         cout << "File Open" << endl;
     }
 
@@ -86,56 +90,68 @@ int main(int argc, char* argv[])
     //inFile >> s;
 
     //cout << s << endl;
-    cout<<endl;
-    while(inFile) {
-        inFile>>s;
-        cout<<s<<" ";
+    cout << endl;
+    while (inFile) {
+        inFile >> s;
+        //cout << s << " ";
 
         int i = 0;
-        while (i<s.length()) {
+        while (i < s.length()) {
             if (s[i] > 64 && s[i] < 91) {
                 s[i] = s[i] + 32;
             }
-            if ((s[i] < 97 || s[i] > 122) && (s[i]<48 || s[i]>57)) {
-                s.erase(i,1);
+            if ((s[i] < 97 || s[i] > 122) && (s[i] < 48 || s[i] > 57)) {
+                s.erase(i, 1);
                 i--;
             }
             i++;
         }
         myWords.push_back(s);
     }
-    cout<<endl;
+    //cout << endl;
 
     deque<string>::iterator it = myWords.begin();
 
-    for(int i = 0; i<tableSize; i++){
+    for (int i = 0; i < tableSize; i++) {
         HashTable[i] = NULL;
     }
 
     while (myWords.size() > chunkSize) {
         string str1 = "";
         for (int i = 0; i < chunkSize; i++) {
-            //cout << *it << " ";
+            //cout << *it;
             str1 += *it;
             it++;
         }
         int tableIndex = hashFunction(str1);
-        if(HashTable[tableIndex] == NULL) {
-            HashTable[tableIndex]->fileIndex = 2;
+
+        if (HashTable[tableIndex] == NULL) {
+            HashTable[tableIndex] = new FileNode;
+            HashTable[tableIndex]->fileIndex = fileIndex;
             HashTable[tableIndex]->next = NULL;
-        }else{
-            FileNode* temp = HashTable[tableIndex];
-            HashTable[tableIndex]->fileIndex = 2;
+        } else {
+            FileNode *temp = HashTable[tableIndex];
+            HashTable[tableIndex] = new FileNode;
+            HashTable[tableIndex]->fileIndex = fileIndex;
             HashTable[tableIndex]->next = temp;
         }
-        cout << tableIndex << endl;
-        cout << HashTable[tableIndex]->fileIndex;
+
+        cout << str1 << " ";
+        cout << tableIndex << " ";
+        //FileNode* cur = HashTable[tableIndex];
+        // while(HashTable[tableIndex] != NULL) {
+        //    cout << HashTable[tableIndex]->fileIndex << " ";
+        //    cur = cur->next;
+        //  }
+        cout << HashTable[tableIndex]->fileIndex << endl;
+        //cout << endl;
         myWords.pop_front();
         it = myWords.begin();
         //cout<<endl;
     }
-
-
+    cout<<endl;
+    cout<<endl;
+}
     return 0;
 }
 
