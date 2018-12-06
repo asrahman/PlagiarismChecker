@@ -12,10 +12,11 @@
 #include <deque>
 #include <cmath>
 #include <stdlib.h>
+#include <algorithm>
 
 using namespace std;
 
-static const int tableSize = 103801;      //random prime number
+static const int tableSize = 1000081;      //random prime number
 
 struct FileNode
 {
@@ -23,10 +24,22 @@ struct FileNode
     FileNode* next;
 };
 
+struct FileInfo
+{
+    int num_collision;
+    int file1;
+    int file2;
+};
+
+vector<FileInfo*> collision_data; //structs of file data
+
+int num_similar = 200; //change to argv[3]
+
 FileNode* HashTable[tableSize];
 
-
-
+bool compareCollision (const FileInfo* file1, const FileInfo* file2) {
+    return file1->num_collision > file2->num_collision;
+}
 
 
 int hashFunction(string chunk){
@@ -189,8 +202,20 @@ for(int k=0; k<files.size(); k++){
     for(int k=0; k<files.size(); k++){
         for(int l=0; l<files.size(); l++){
             cout << grid[k][l] << " ";
+            if (grid[k][l] >= num_similar) {
+                FileInfo* temp = new FileInfo;
+                temp->file1 = k;
+                temp->file2 = l;
+                temp->num_collision = grid[k][l];
+                collision_data.push_back(temp);
+            }
         }
         cout << endl;
+    }
+
+    sort(collision_data.begin(),collision_data.end(),compareCollision);
+    for (int i = 0; i < collision_data.size(); i++) {
+        cout<<collision_data[i]->num_collision<<": "<<files[collision_data[i]->file1]<<", "<<files[collision_data[i]->file2]<<endl;
     }
 
 
