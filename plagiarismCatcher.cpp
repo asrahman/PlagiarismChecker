@@ -78,6 +78,10 @@ int main(int argc, char* argv[])
         cout << i << files[i] << endl;
     }
 
+    for (int i = 0; i < tableSize; i++) {
+        HashTable[i] = NULL;
+    }
+
 for(int fileIndex=0; fileIndex < files.size(); fileIndex++) {
 
     ifstream inFile;
@@ -114,10 +118,6 @@ for(int fileIndex=0; fileIndex < files.size(); fileIndex++) {
 
     deque<string>::iterator it = myWords.begin();
 
-    for (int i = 0; i < tableSize; i++) {
-        HashTable[i] = NULL;
-    }
-
     while (myWords.size() > chunkSize) {
         string str1 = "";
         for (int i = 0; i < chunkSize; i++) {
@@ -128,14 +128,14 @@ for(int fileIndex=0; fileIndex < files.size(); fileIndex++) {
         int tableIndex = hashFunction(str1);
 
         if (HashTable[tableIndex] == NULL) {
-            HashTable[tableIndex] = new FileNode;
-            HashTable[tableIndex]->fileIndex = fileIndex;
-            HashTable[tableIndex]->next = NULL;
-        } else {
-            FileNode *temp = new FileNode;
-            temp->fileIndex = fileIndex;
-            temp->next = HashTable[tableIndex];
-            HashTable[tableIndex] = temp;
+                HashTable[tableIndex] = new FileNode;
+                HashTable[tableIndex]->fileIndex = fileIndex;
+                HashTable[tableIndex]->next = NULL;
+        } else if(HashTable[tableIndex]->fileIndex != fileIndex) {
+                FileNode *temp = new FileNode;
+                temp->fileIndex = fileIndex;
+                temp->next = HashTable[tableIndex];
+                HashTable[tableIndex] = temp;
         }
 
         //cout << str1 << " ";
@@ -157,13 +157,22 @@ for(int fileIndex=0; fileIndex < files.size(); fileIndex++) {
 
 int grid[files.size()][files.size()];
 
+for(int k=0; k<files.size(); k++){
+    for(int l=0; l<files.size(); l++){
+        grid[k][l] = 0;
+    }
+}
+
     for(int i=0; i<tableSize; i++){
 
         if(HashTable[i] == NULL){
         }else {
             FileNode *cur = HashTable[i];
             while (cur != NULL) {
-                cout << HashTable[i]->fileIndex << " ";
+                cout << cur->fileIndex << " ";
+
+                
+
                 cur = cur->next;
             }
             cout << endl;
